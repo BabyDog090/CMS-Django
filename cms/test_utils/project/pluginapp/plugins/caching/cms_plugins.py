@@ -13,16 +13,26 @@ class NoCachePlugin(CMSPluginBase):
     render_template = "plugins/nocache.html"
 
     def render(self, context, instance, placeholder):
+
+    def render(self, context, instance, placeholder):
         context['now'] = datetime.now().microsecond
         return context
 
 
-class LegacyCachePlugin(CMSPluginBase):
-    name = 'NoCache'
+class TTLCacheExpirationPlugin(CMSPluginBase):
+    name = 'TTLCacheExpiration'
     module = 'Test'
     render_plugin = True
-    # NOTE: We have both the old mechanism...
-    cache = False
+    render_template = "plugins/nocache.html"
+
+    def get_cache_expiration(self, request, instance, placeholder):
+        """Content is only valid for the next 50 seconds."""
+        return 50
+
+    def render(self, context, instance, placeholder):
+        context['now'] = datetime.now().microsecond
+        return context
+
 
 class TimeDeltaCacheExpirationPlugin(CMSPluginBase):
     name = 'DateTimeCacheExpiration'

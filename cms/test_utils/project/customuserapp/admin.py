@@ -13,6 +13,3 @@ if getattr(OriginalUser._meta, 'swapped', False):
             ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser',
                                         'groups', 'user_permissions')}),
             ('Important dates', {'fields': ('last_login',)}),
-        )
-
-    admin.site.register(get_user_model(), UserAdmin)

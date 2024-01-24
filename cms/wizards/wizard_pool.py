@@ -13,16 +13,26 @@ def entry_choices(user, page):
     Yields a list of wizard entries that the current user can use based on their
     permission to add instances of the underlying model objects.
     """
-    for entry in wizard_pool.get_entries():
-        if entry.user_has_add_permission(user, page=page):
-            yield (entry.id, entry.title)
+            autodiscover_modules('cms_wizards')
+            self._discovered = True
 
+    def _clear(self):
+        """Simply empties the pool but does not clear the discovered flag."""
+        self._entries = {}
 
-class WizardPool:
-    _entries = {}
-    _discovered = False
+    def _reset(self):
+        """Clears the wizard pool and clears the discovered flag."""
+        self._clear()
+        self._discovered = False
 
-    def __init__(self):
+    # PUBLIC METHODS ------------------
+
+    @property
+    def discovered(self):
+        """
+        A public getter for the private property _discovered. Note, there is no
+        public setter.
+        """
         return self._discovered
 
     def is_registered(self, entry, **kwargs):

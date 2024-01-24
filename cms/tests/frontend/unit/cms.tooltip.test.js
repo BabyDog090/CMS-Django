@@ -13,16 +13,26 @@ describe('CMS.Tooltip', function () {
 
     it('creates a Tooltip class', function () {
         expect(CMS.Tooltip).toBeDefined();
-    });
+                done();
+            });
+        });
 
-    it('has public API', function () {
-        expect(CMS.Tooltip.prototype.displayToggle).toEqual(jasmine.any(Function));
-        expect(CMS.Tooltip.prototype.show).toEqual(jasmine.any(Function));
-        expect(CMS.Tooltip.prototype.position).toEqual(jasmine.any(Function));
-        expect(CMS.Tooltip.prototype.hide).toEqual(jasmine.any(Function));
-    });
+        afterEach(function () {
+            fixture.cleanup();
+        });
 
-    describe('instance', function () {
+        it('does not have options', function () {
+            expect(tooltip.options).not.toBeDefined();
+        });
+
+        it('has ui', function () {
+            expect(tooltip.body).toBeDefined();
+            expect(tooltip.domElem).toBeDefined();
+        });
+
+        it('picks correct dom node to show if touch enabled device', function () {
+            expect(tooltip.domElem).toBeMatchedBy('.cms-tooltip');
+            expect(tooltip.isTouch).toEqual(false);
 
             tooltip.body.trigger('touchstart');
 

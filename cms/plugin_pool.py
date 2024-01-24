@@ -13,16 +13,26 @@ from cms.exceptions import PluginAlreadyRegistered, PluginNotRegistered
 from cms.plugin_base import CMSPluginBase
 from cms.utils.conf import get_cms_setting
 from cms.utils.helpers import normalize_name
+            del self.__dict__['plugins_with_extra_placeholder_menu']
 
+    def discover_plugins(self):
+        if self.discovered:
+            return
+        from cms.cache import invalidate_cms_page_cache
 
-class PluginPool:
+        if get_cms_setting("PAGE_CACHE") and get_cms_setting("INVALIDATE_PAGE_CACHE_ON_STARTUP"):
+            invalidate_cms_page_cache()
 
-    def __init__(self):
-        self.plugins = {}
+        autodiscover_modules('cms_plugins')
+        self.discovered = True
+
+    def clear(self):
         self.discovered = False
+        self.plugins = {}
+        self._clear_cached()
 
-    def _clear_cached(self):
-        if 'registered_plugins' in self.__dict__:
+    def validate_templates(self, plugin=None):
+        """
         Plugins templates are validated at this stage
         """
         if plugin:

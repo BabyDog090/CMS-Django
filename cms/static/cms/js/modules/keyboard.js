@@ -13,13 +13,4 @@ function override(originalFunction, functionBuilder) {
 
     newFn.prototype = originalFunction.prototype;
     return newFn;
-}
-
-/**
- * Override keyboardjs methods to disallow running callbacks
- * if input is focused
- */
-keyboard._applyBindings = override(keyboard._applyBindings, function(originalBind) {
-    return function(event) {
-        if ($(':focus').is('input, textarea, select, [contenteditable]')) {
-            return true;
+export default keyboard;
